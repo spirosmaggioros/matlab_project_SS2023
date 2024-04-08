@@ -60,15 +60,19 @@ ylabel("P(X)");
 
 % A)
 lambda = 10;
-mean = lambda;
+mean = 1./lambda;
 % Επειδή θέλουμε τα γεγονότα να είναι διαδοχικά, ταξινομούμε τα γεγονότα
-random_events = sort(exprnd(mean, [1 100]));
+random_events = exprnd(mean, [1 100]);
+for i=2:length(random_events)
+    random_events(i) = random_events(i) + random_events(i - 1);
+end
 figure(4);
 % Δημιουργούμε μια poisson cdf 
 stairs(random_events, 1:length(random_events));
 title("Poisson Count Process");
 xlabel("random events");
 ylabel("Number of events");
+
 
 % Β)
 mean_number_of_events = max(random_events) .* lambda;
@@ -83,6 +87,9 @@ num_events = [200, 400, 700, 1000, 5000, 50000, 100000];
 for i=1:7
     % σε κάθε bucket βάζουμε το ένα subplot
     nexttile
-    random_events = sort(exprnd(mean, [1 num_events(i)]));
+    random_events = exprnd(mean, [1 num_events(i)]);
+    for j=2:length(random_events)
+        random_events(j) = random_events(j) + random_events(j - 1);
+    end
     stairs(random_events, 1:length(random_events));
 end
